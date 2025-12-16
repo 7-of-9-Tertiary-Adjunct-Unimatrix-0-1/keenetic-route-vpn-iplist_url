@@ -45,8 +45,22 @@ PIDFILE="${PIDFILE:-/tmp/parser.sh.pid}"
 ( echo $$ > "$PIDFILE" ) 2>/dev/null || logger_failure "Не удалось создать файл \"${PIDFILE}\"."
 trap 'rm -f "$PIDFILE"' EXIT
 trap 'exit 2' INT TERM QUIT HUP
+TMP_FILE=""
 
-[ -f "$FILE" ] || logger_failure "Отсутствует файл \"${FILE}\"."
+case "$FILE" in
+  http://*|https://*)
+    TMP_FILE="$(mktemp)"
+    if ! curl -fsSL "$FILE" -o "$TMP_FILE"; then
+      logger_failure "Не удалось загрузить файл по URL: $FILE"
+    fi
+    PARSE_FILE="$TMP_FILE"
+    ;;
+  *)
+    [ -f "$FILE" ] || logger_failure "Отсутствует файл \"${FILE}\"."
+    PARSE_FILE="$FILE"
+    ;;
+esac
+
 
 if ! ip address show dev "$IFACE" >/dev/null 2>&1; then
   logger_failure "Не удалось обнаружить интерфейс \"${IFACE}\"."
@@ -69,7 +83,7 @@ else
   logger_failure "Не удалось очистить таблицу маршрутизации #1000."
 fi
 
-logger_msg "Парсинг $(grep -c "" "$FILE") строк(-и) в файле \"${FILE}\"..."
+logger_msg "Парсинг $(grep -c "" "$PARSE_FILE") строк(-и)"..."
 
 while read -r line || [ -n "$line" ]; do
   [ -z "$line" ] && continue
@@ -85,7 +99,9 @@ while read -r line || [ -n "$line" ]; do
       logger_msg "Не удалось разрешить доменное имя: строка \"${line}\" проигнорирована."
     fi
   fi
-done < "$FILE"
+done < "$PARSE_FILE"
+
+[ -n "$TMP_FILE" ] && rm -f "$TMP_FILE"
 
 logger_msg "Парсинг завершен. #1000: $(ip route list table 1000 | wc -l)."
 
