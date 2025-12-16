@@ -53,10 +53,10 @@ crt_symlink() {
 fi
 }
 
-msg "Выполняется установка keenetic-traffic-via-vpn..."
+msg "Выполняется установка keenetic-route-vpn-iplist_url..."
 
 INSTALL_DIR="/opt/etc/unblock"
-REPO_URL="https://raw.githubusercontent.com/rustrict/keenetic-traffic-via-vpn/main"
+REPO_URL="https://raw.githubusercontent.com/7-of-9-Tertiary-Adjunct-Unimatrix-0-1/keenetic-route-vpn-iplist_url/main"
 
 check_command opkg || failure "Для установки пакетов требуется opkg."
 opkg update >/dev/null 2>&1 || failure "Не удалось обновить список пакетов Entware."
@@ -101,6 +101,6 @@ if [ ! -f "${INSTALL_DIR}/unblock-list.txt" ]; then
 fi
 
 printf "%s\n" "---" "Установка завершена."
-msg "Не забудьте вписать название интерфейса VPN в файл config, а также заполнить файл unblock-list.txt."
+msg "Не забудьте вписать название интерфейса VPN в файл config, а также указать ссылку на файл unblock-list.txt."
 
 exit 0
