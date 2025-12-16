@@ -10,14 +10,14 @@ opkg install curl
 Для начала процесса установки выполните команду:
 
 ```shell
-curl -sfL https://raw.githubusercontent.com/rustrict/keenetic-traffic-via-vpn/main/install.sh | sh
+curl -sfL https://raw.githubusercontent.com/7-of-9-Tertiary-Adjunct-Unimatrix-0-1/keenetic-route-vpn-iplist_url/main/install.sh | sh
 ```
 
 Установщик создаст каталог `/opt/etc/unblock` (если такой не существует) и поместит в него необходимые файлы. Также будут созданы два симлинка для отслеживания состояния VPN-туннеля и автоматического обновления маршрутов раз в сутки. Для работы скрипта `parser.sh` требуются `bind-dig`, `cron` и `grep` — они будут установлены при отсутствии.
 
 После окончания установки понадобится:
 - Отредактировать файл `/opt/etc/unblock/config`, указав в переменной `IFACE` название интерфейса VPN, которое можно увидеть в выводе команды `ip address show` или `ifconfig`. Например, `ovpn_br0` (=`OpenVPN0`) или `nwg0` (=`Wireguard0`);
-- Заполнить файл `/opt/etc/unblock/unblock-list.txt` доменами и (или) IPv4-адресами (как с префиксом, так и без) ресурсов, трафик до которых вы хотите пустить через VPN;
+- Создать файл и разсместить на хостинге `unblock-list.txt` с доменами и (или) IPv4-адресами (как с префиксом, так и без) ресурсов, трафик до которых вы хотите пустить через VPN;
 - Запустить VPN-соединение (или перезапустить, если оно было запущено до установки).
 
 ### Примеры заполнения config
@@ -27,8 +27,8 @@ curl -sfL https://raw.githubusercontent.com/rustrict/keenetic-traffic-via-vpn/ma
 # Название интерфейса VPN-туннеля из ifconfig или ip address show
 IFACE="ovpn_br0"
 
-# Расположение файла с адресами и доменами
-FILE="/opt/etc/unblock/unblock-list.txt"
+# Url файла с адресами и доменами
+FILE="https://your-site.com/unblock-list.txt"
 ```
 
 Для WireGuard-туннеля:
@@ -37,8 +37,8 @@ FILE="/opt/etc/unblock/unblock-list.txt"
 # Название интерфейса VPN-туннеля из ifconfig или ip address show
 IFACE="nwg0"
 
-# Расположение файла с адресами и доменами
-FILE="/opt/etc/unblock/unblock-list.txt"
+# Url файла с адресами и доменами
+FILE="https://your-site.com/unblock-list.txt"
 ```
 
 ### Пример заполнения unblock-list.txt
