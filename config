@@ -1,5 +1,5 @@
 # Название интерфейса VPN-туннеля из ifconfig или ip address show
 IFACE="foobar"
 
-# Расположение файла с адресами и доменами, поддерживается http и https
+# url файла с адресами и доменами, поддерживается http и https
 FILE="https://your-site.com/unblock-list.txt"
