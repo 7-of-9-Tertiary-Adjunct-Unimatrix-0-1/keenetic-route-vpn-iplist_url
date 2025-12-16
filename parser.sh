@@ -83,20 +83,25 @@ else
   logger_failure "Не удалось очистить таблицу маршрутизации #1000."
 fi
 
-logger_msg "Парсинг $(grep -c "" "$PARSE_FILE") строк(-и)"..."
+logger_msg "Парсинг $(grep -c '' "$PARSE_FILE") строк(-и)..."
 
 while read -r line || [ -n "$line" ]; do
   [ -z "$line" ] && continue
-  [ "${line:0:1}" = "#" ] && continue
+
+  case "$line" in
+    \#*) continue ;;
+  esac
 
   if check_ip "$line"; then
     add_ip "$line"
   else
-    dig_host=$(dig +short "$line" @localhost 2>&1 | grep -vE '[a-z]+' | cut_special)
+    dig_host=$(dig +short "$line" @localhost 2>/dev/null | grep -vE '[a-z]+' | cut_special)
     if [ -n "$dig_host" ]; then
-      for i in $dig_host; do check_ip "$i" && add_ip "$i"; done
+      for i in $dig_host; do
+        check_ip "$i" && add_ip "$i"
+      done
     else
-      logger_msg "Не удалось разрешить доменное имя: строка \"${line}\" проигнорирована."
+      logger_msg "Не удалось разрешить доменное имя: строка \"$line\" проигнорирована."
     fi
   fi
 done < "$PARSE_FILE"
