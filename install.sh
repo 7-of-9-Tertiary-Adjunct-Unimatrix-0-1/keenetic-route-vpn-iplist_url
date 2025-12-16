@@ -92,13 +92,6 @@ done
 crt_symlink "${INSTALL_DIR}/parser.sh" "/opt/etc/cron.daily/routing_table_update"
 crt_symlink "${INSTALL_DIR}/start-stop.sh" "/opt/etc/ndm/ifstatechanged.d/ip_rule_switch"
 
-if [ ! -f "${INSTALL_DIR}/unblock-list.txt" ]; then
-  if touch "${INSTALL_DIR}/unblock-list.txt" 2>/dev/null; then
-    msg "Файл \"${INSTALL_DIR}/unblock-list.txt\" создан."
-  else
-    error_msg "Не удалось создать файл \"${INSTALL_DIR}/unblock-list.txt\"."
-  fi
-fi
 
 printf "%s\n" "---" "Установка завершена."
 msg "Не забудьте вписать название интерфейса VPN в файл config, а также указать ссылку на файл unblock-list.txt."
