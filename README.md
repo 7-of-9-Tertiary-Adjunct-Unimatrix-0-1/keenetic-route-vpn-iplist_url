@@ -1,3 +1,6 @@
+
+fork на https://github.com/rustrict/keenetic-traffic-via-vpn
+
 Данный проект позволяет перенаправлять трафик для отдельных ресурсов в VPN-туннель на роутерах [Keenetic](https://keenetic.ru/) с использованием репозитория [Entware](https://entware.net/).
 
 ## Установка
